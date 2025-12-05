@@ -5,6 +5,8 @@
 #include "Components/ChildActorComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Examples/CodeRifle.h"
+#include "AIController.h"
+#include "BrainComponent.h"
 #include "Both/CharacterAnimation.h"
 #include "Code/Actors/HealthComponent.h"
 
@@ -78,6 +80,15 @@ void ABaseCharacter::HandleDeath()
 		{
 			Anim->SelectDeathAnimation();
 		}
+	}
+	if (AAIController* AIC = Cast<AAIController>(GetController()))
+	{
+		if (UBrainComponent* Brain = AIC->GetBrainComponent())
+		{
+			Brain->StopLogic(TEXT("Dead"));
+		}
+
+		AIC->StopMovement();
 	}
 
 	// Match BP: disable collision so projectiles pass through and AI shoots “over” you

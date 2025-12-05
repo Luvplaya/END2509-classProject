@@ -19,7 +19,8 @@ class END2509_API ABaseCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
-
+public:
+	FORCEINLINE ACodeRifle* GetWeaponObject() const { return WeaponObject; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

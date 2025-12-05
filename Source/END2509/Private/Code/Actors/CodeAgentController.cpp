@@ -11,8 +11,8 @@ ACodeAgentController::ACodeAgentController()
     PerceptionComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComp"));
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 
-    SightConfig->SightRadius = 9000.f;
-    SightConfig->LoseSightRadius = 1100.f;
+    SightConfig->SightRadius = 900.f;
+    SightConfig->LoseSightRadius = 1000.f;
     SightConfig->PeripheralVisionAngleDegrees = 45.f;
 
     PerceptionComp->ConfigureSense(*SightConfig);
@@ -73,10 +73,10 @@ void ACodeAgentController::Tick(float DeltaSeconds)
 void ACodeAgentController::BeginPlay()
 {
     Super::BeginPlay();
-    if (UAIPerceptionComponent* Perception =
-        FindComponentByClass<UAIPerceptionComponent>())
+    if (PerceptionComp)
     {
-        PerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &ACodeAgentController::OnTargetPerception);
+        PerceptionComp->OnTargetPerceptionUpdated.AddDynamic(
+            this, &ACodeAgentController::OnTargetPerception);
     }
 }
 
@@ -84,11 +84,17 @@ void ACodeAgentController::OnTargetPerception(AActor* Actor, FAIStimulus Stimulu
 {
     UBlackboardComponent* BB = GetBlackboardComponent();
     if (!BB) return;
+   
     const float Now = GetWorld()->GetTimeSeconds();
+   
     if (Stimulus.WasSuccessfullySensed())
     {
         BB->SetValueAsObject(TEXT("Player"), Actor);
         LastTimeSensedPlayer = Now;
     }
-    
+    else
+    {
+       
+        LastTimeSensedPlayer = Now;
+    }
 }

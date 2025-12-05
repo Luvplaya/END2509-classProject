@@ -26,11 +26,11 @@ public:
     virtual void Tick(float DeltaSeconds) override;
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "AI")
-    float LoseSightDelay = 1.0f;
+    float LoseSightDelay = 2.0f;
 
    
     float LastTimeSensedPlayer = -1.f;
-    UPROPERTY(EditDefaultsOnly, Category = "AI")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
     UBehaviorTree* BTAsset;
 
     

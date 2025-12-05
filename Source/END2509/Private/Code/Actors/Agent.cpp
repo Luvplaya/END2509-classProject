@@ -27,7 +27,7 @@ void AAgent::BeginPlay()
     Super::BeginPlay();
 
     CurrentHealth = MaxHealth;
-    HealthRatio = 1.f;
+    HealthRatio = 1.0f;
 
     UpdateHealthBlackboard();
 }

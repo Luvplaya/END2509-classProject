@@ -23,9 +23,13 @@ public:
     ACodeAgentController();
 
     virtual void OnPossess(APawn* InPawn) override;
-
+    virtual void Tick(float DeltaSeconds) override;
 protected:
-    
+    UPROPERTY(EditDefaultsOnly, Category = "AI")
+    float LoseSightDelay = 1.0f;
+
+   
+    float LastTimeSensedPlayer = -1.f;
     UPROPERTY(EditDefaultsOnly, Category = "AI")
     UBehaviorTree* BTAsset;
 

@@ -7,6 +7,7 @@
 
 ACodeAgentController::ACodeAgentController()
 {
+    PrimaryActorTick.bCanEverTick = true;
     PerceptionComp = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComp"));
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
 
@@ -47,6 +48,28 @@ void ACodeAgentController::OnPossess(APawn* InPawn)
     }
 }
 
+void ACodeAgentController::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+
+    if (!BlackboardComp)
+        return;
+
+    
+    if (LastTimeSensedPlayer > 0.f)
+    {
+        const float TimeSinceSeen =
+            GetWorld()->GetTimeSeconds() - LastTimeSensedPlayer;
+
+        if (TimeSinceSeen > LoseSightDelay)
+        {
+            
+            BlackboardComp->ClearValue(TEXT("Player"));
+            LastTimeSensedPlayer = -1.f;
+        }
+    }
+}
+
 void ACodeAgentController::BeginPlay()
 {
     Super::BeginPlay();
@@ -61,15 +84,11 @@ void ACodeAgentController::OnTargetPerception(AActor* Actor, FAIStimulus Stimulu
 {
     UBlackboardComponent* BB = GetBlackboardComponent();
     if (!BB) return;
-
+    const float Now = GetWorld()->GetTimeSeconds();
     if (Stimulus.WasSuccessfullySensed())
     {
         BB->SetValueAsObject(TEXT("Player"), Actor);
-       
+        LastTimeSensedPlayer = Now;
     }
-    else
-    {
-        BB->ClearValue(TEXT("Player"));
-       
-    }
+    
 }

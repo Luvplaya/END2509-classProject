@@ -24,13 +24,13 @@ protected:
 
     // Health
     UPROPERTY(EditDefaultsOnly, Category = "Health")
-    float MaxHealth = 100.f;
+    float MaxHealth = 5.0f;
 
     UPROPERTY(VisibleInstanceOnly, Category = "Health")
-    float CurrentHealth = 100.f;
+    float CurrentHealth = 5.0f;
 
     UPROPERTY(VisibleInstanceOnly, Category = "Health")
-    float HealthRatio = 1.f;
+    float HealthRatio = 1.0f;
 
 public:
    /* UFUNCTION(BlueprintCallable, Category = "Health")

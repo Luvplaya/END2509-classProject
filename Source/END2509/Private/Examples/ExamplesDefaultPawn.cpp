@@ -4,7 +4,8 @@
 #include "Examples/ExamplesDefaultPawn.h"
 #include "../END2509.h"
 #include "GameFramework/PlayerInput.h"
-
+#include "Examples/ExampleActorWithInterfaces.h"
+#include "EngineUtils.h"// TActorIterator(GetActorOfClass)
 // Sets default values
 AExamplesDefaultPawn::AExamplesDefaultPawn()
 {
@@ -33,7 +34,33 @@ void AExamplesDefaultPawn::BeginPlay()
 	UE_LOG(Game, Error, TEXT("Velocity is %s"), *GetVelocity().ToString());
 
 	UE_LOG(Game, Error, TEXT("It is: %hs"), true ? "True" : "False");
+
+
+
+	//GAR
+	for (TActorIterator<AExampleActorWithInterfaces> itr(GetWorld()); itr; ++itr)
+	{
+		ParentActor = *itr;
+
+		//UExampleInterface* U = Cast< UExampleInterface>(ParentActor);
+		//if (U)
+		//{
+		//	UE_LOG(Game, Log, TEXT("Actor successfully cast to the U interface"));
+		//	//U->TestFunction();// did not show up in intellisense, wont compile
+		//}
+		
+		// this is how you should use a c++ interface
+		IExampleInterface* I = Cast< IExampleInterface>(ParentActor);
+		if (I)
+		{
+			UE_LOG(Game, Log, TEXT("Actor successfully cast to the I interface"));
+			I->TestFunction();
+		}
+	}
+
+
 }
+
 
 // Called every frame
 void AExamplesDefaultPawn::Tick(float DeltaTime)

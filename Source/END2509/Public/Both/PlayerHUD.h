@@ -13,7 +13,7 @@ class UProgressBar;
 class UImage;
 class UMaterialInterface;
 class UMaterialInstanceDynamic;
-
+class UTextBlock;
 UCLASS(BlueprintType, Blueprintable)
 class END2509_API UPlayerHUD : public UUserWidget
 {
@@ -34,6 +34,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly, Category = "HUD") FLinearColor SafeColor = FLinearColor(0.1f, 0.1f, 0.7f, 1.f);
 	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly, Category = "HUD") FLinearColor DangerColor = FLinearColor(0.85f, 0.1f, 0.1f, 1.f);
 
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* CurrentAmmo;
+
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MaxAmmo;
 public:
 	
 	UFUNCTION(BlueprintCallable)
@@ -44,6 +49,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void SetCrosshairColor(const FLinearColor& Color);
+
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void SetAmmo(float Current, float Max);
 private:
 	UPROPERTY(Transient)
 	UMaterialInstanceDynamic* CrosshairMID = nullptr;

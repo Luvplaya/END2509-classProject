@@ -9,7 +9,7 @@
 #include "Kismet/GameplayStatics.h"               
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
-
+#include "Components/TextBlock.h"
 void UPlayerHUD::NativeConstruct()
 {
     Super::NativeConstruct(); 
@@ -92,5 +92,20 @@ void UPlayerHUD::UpdateCrosshairAndTrace(const FGeometry& Geo)
     {
         Endpoint = RayEnd;
         SetCrosshairColor(SafeColor);
+    }
+
+}
+void UPlayerHUD::SetAmmo(float Current, float Max)
+{
+    if (CurrentAmmo)
+    {
+        const int32 CurrentInt = FMath::RoundToInt(Current);
+        CurrentAmmo->SetText(FText::AsNumber(CurrentInt));
+    }
+
+    if (MaxAmmo)
+    {
+        const int32 MaxInt = FMath::RoundToInt(Max);
+        MaxAmmo->SetText(FText::AsNumber(MaxInt));
     }
 }

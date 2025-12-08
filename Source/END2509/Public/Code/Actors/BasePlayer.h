@@ -9,6 +9,7 @@
 /**
  * 
  */
+
 UCLASS()
 class END2509_API ABasePlayer : public ABaseCharacter
 {
@@ -16,6 +17,20 @@ class END2509_API ABasePlayer : public ABaseCharacter
 public:
 	ABasePlayer();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void FinishReload();          
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void ReloadEnded();           
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	bool bIsReloading = false;
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void StartFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void ReloadWeapon();
 
 protected:
 	UPROPERTY(Category = Character, VisibleAnywhere)
@@ -25,9 +40,17 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UPlayerHUD> PlayerHUDClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<ACodeRifle> RifleClass;
 
 	UPROPERTY()
-	UPlayerHUD* PlayerHUD = nullptr;
+	ACodeRifle* EquippedRifle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	TSubclassOf<UPlayerHUD> HUDClass;
+
+	UPROPERTY()
+	UPlayerHUD* PlayerHUD ;
 public:
 	virtual void HandleHurt(float Ratio) override;
 	virtual void HandleDeath() override;

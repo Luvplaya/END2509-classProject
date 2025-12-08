@@ -18,6 +18,9 @@ ACodeRifle::ACodeRifle()
 	PrimaryActorTick.bCanEverTick = false;
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
+
+    MaxAmmo = 5.0f;       
+    CurrentAmmo = MaxAmmo;
 }
 
 void ACodeRifle::Attack()
@@ -92,3 +95,17 @@ FVector ACodeRifle::GetMuzzleWorldLocation() const
     return Mesh->GetSocketLocation(MuzzleSocket);
 }
 
+void ACodeRifle::UseAmmo()
+{
+    CurrentAmmo = FMath::Max(0.f, CurrentAmmo - 1.f);
+}
+
+void ACodeRifle::ReloadAmmo()
+{
+    CurrentAmmo = MaxAmmo;
+}
+
+float ACodeRifle::GetAmmoFraction() const
+{
+    return (MaxAmmo > 0.f) ? (CurrentAmmo / MaxAmmo) : 0.f;
+}

@@ -27,15 +27,34 @@ public:
 	
 	UPROPERTY(BlueprintAssignable) FOnRifleAttack OnRifleAttack;
 
-
+private:
+	float CurrentAmmo;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+	float MaxAmmo;
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UFUNCTION(BlueprintCallable, Category = "Ammo")
+	void UseAmmo();
+	
+	
+	UFUNCTION(BlueprintCallable, Category = "Ammo")
+	void ReloadAmmo();
 
+	
+	UFUNCTION(BlueprintPure, Category = "Ammo")
+	float GetAmmoFraction() const;
+
+	UFUNCTION(BlueprintPure, Category = "Ammo")
+	float GetCurrentAmmo() const { return CurrentAmmo; }
+
+	UFUNCTION(BlueprintPure, Category = "Ammo")
+	float GetMaxAmmo() const { return MaxAmmo; }
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rifle")
 	USkeletalMeshComponent* Mesh;

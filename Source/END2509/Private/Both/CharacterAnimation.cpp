@@ -6,6 +6,8 @@
 #include "Animation/AnimSequenceBase.h"
 #include "GameFramework/Pawn.h"
 #include "Math/UnrealMathUtility.h"
+#include <Code/Actors/BasePlayer.h>
+#include "Animation/AnimInstance.h" 
 
 void UCharacterAnimation::HitAnimation(float/*NotUsed*/)
 {
@@ -74,6 +76,43 @@ void UCharacterAnimation::FireAnimation()
 	}
 }
 
+void UCharacterAnimation::ReloadAnimation()
+{
+	if (ReloadAsset)   
+	{
+		PlaySlotAnimationAsDynamicMontage(
+			ReloadAsset,
+			ActionSlotName,
+			0.1f, 0.1f, 1.f, 1, 0.f);
+	}
+	bIsReloading = true;
+}
+
 void UCharacterAnimation::PreviewWindowUpdate_Implementation()
 {
+}
+void UCharacterAnimation::NativeInitializeAnimation()
+{
+	Super::NativeInitializeAnimation();
+
+	
+	OnReloadNow.AddDynamic(this, &UCharacterAnimation::ReloadNow);
+	OnReloadEnded.AddDynamic(this, &UCharacterAnimation::ReloadFinished);
+}
+void UCharacterAnimation::ReloadNow()
+{
+	APawn* OwnerPawn = TryGetPawnOwner();
+	if (ABasePlayer* Player = Cast<ABasePlayer>(OwnerPawn))
+	{
+		Player->FinishReload();
+	}
+}
+
+void UCharacterAnimation::ReloadFinished()
+{
+	APawn* OwnerPawn = TryGetPawnOwner();
+	if (ABasePlayer* Player = Cast<ABasePlayer>(OwnerPawn))
+	{
+		Player->ReloadEnded();
+	}
 }

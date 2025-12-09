@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Code/Actors/BAseCharacter.h"
+#include "Code/Actors/BaseCharacter.h"
 #include "BasePlayer.generated.h"
 
 /**
@@ -17,6 +17,10 @@ class END2509_API ABasePlayer : public ABaseCharacter
 public:
 	ABasePlayer();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	virtual bool CanPickupHealth_Implementation(AActor* PickupActor) override;
+
+	
 	
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void FinishReload();          
@@ -52,8 +56,11 @@ protected:
 	UPROPERTY()
 	UPlayerHUD* PlayerHUD ;
 public:
+	
 	virtual void HandleHurt(float Ratio) override;
 	virtual void HandleDeath() override;
+	
+	virtual void HandleHeal(float Ratio) override;
 	UPlayerHUD* GetPlayerHUD() const { return PlayerHUD; }
 
 private:

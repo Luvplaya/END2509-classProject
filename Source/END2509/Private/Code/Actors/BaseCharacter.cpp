@@ -72,6 +72,10 @@ void ABaseCharacter::HandleHurt(float Ratio)
 	}
 }
 
+void ABaseCharacter::HandleHeal(float Ratio)
+{
+}
+
 void ABaseCharacter::HandleDeath()
 {
 	if (USkeletalMeshComponent* MeshComp = GetMesh())
@@ -119,3 +123,14 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+bool ABaseCharacter::CanPickup_Implementation(AActor* PickupActor)
+{
+	return true;
+}
+
+
+bool ABaseCharacter::CanPickupHealth_Implementation(AActor* PickupActor)
+{
+	
+	return false;
+}

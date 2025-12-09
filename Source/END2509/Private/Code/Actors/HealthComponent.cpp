@@ -14,6 +14,11 @@ UHealthComponent::UHealthComponent()
 }
 
 
+float UHealthComponent::GetHealthRatio() const
+{
+    return (MaxHealth > 0.f) ? (CurrentHealth / MaxHealth) : 0.f;
+}
+
 // Called when the game starts
 void UHealthComponent::BeginPlay()
 {
@@ -36,23 +41,33 @@ void UHealthComponent::HandleTakeAnyDamage(AActor*, float Damage,
         *GetOwner()->GetName(), Damage, CurrentHealth,
         FMath::Max(0.f, CurrentHealth - Damage), MaxHealth);
 
-    if (Damage <= 0.0f || MaxHealth <= 0.0f) return;
+    if (Damage == 0.0f || MaxHealth <= 0.0f) return;
 
     CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
-    const float Ratio = (MaxHealth > 0.0f) ? CurrentHealth / MaxHealth : 0.0f;
+    const float Ratio = GetHealthRatio();
 
-    if (CurrentHealth > 0.0f)
+    if (Damage > 0.0f) 
     {
-        OnHurt.Broadcast(Ratio);
-    }
-    else
-    {
-        if (AActor* Owner = GetOwner())
+        if (CurrentHealth > 0.0f)
         {
-            Owner->OnTakeAnyDamage.RemoveDynamic(this, &UHealthComponent::HandleTakeAnyDamage);
-            
+            UE_LOG(LogTemp, Warning, TEXT("[Health] OnHurt %.2f"), Ratio);
+            OnHurt.Broadcast(Ratio);
         }
-        OnDeath.Broadcast();
+        else
+        {
+            if (AActor* Owner = GetOwner())
+            {
+                Owner->OnTakeAnyDamage.RemoveDynamic(
+                    this, &UHealthComponent::HandleTakeAnyDamage);
+            }
+            UE_LOG(LogTemp, Warning, TEXT("[Health] OnDeath"));
+            OnDeath.Broadcast();
+        }
+    }
+    else if (Damage < 0.0f) 
+    {
+        UE_LOG(LogTemp, Warning, TEXT("[Health] OnHeal %.2f"), Ratio);
+        OnHeal.Broadcast(Ratio);
     }
 }
 

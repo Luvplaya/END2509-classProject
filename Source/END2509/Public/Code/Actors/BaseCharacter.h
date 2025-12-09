@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Both/CharacterAnimation.h"
+#include "Both/PickupInterface.h"
 #include "BaseCharacter.generated.h"
 
 class UChildActorComponent;
@@ -13,13 +14,15 @@ class UCharacterAnimation;
 class UHealthComponent;
 
 UCLASS(ABSTRACT)
-class END2509_API ABaseCharacter : public ACharacter
+class END2509_API ABaseCharacter : public ACharacter, public IPickupInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
+	virtual bool CanPickup_Implementation(AActor* PickupActor) override;
+	virtual bool CanPickupHealth_Implementation(AActor* PickupActor) override;
 public:
 	FORCEINLINE ACodeRifle* GetWeaponObject() const { return WeaponObject; }
 protected:
@@ -43,7 +46,8 @@ protected:
 	UHealthComponent* HealthComponent = nullptr;
 	UFUNCTION()
 	virtual void HandleHurt(float Ratio);
-
+	UFUNCTION()
+	virtual void HandleHeal(float Ratio);
 	UFUNCTION()
 	virtual void HandleDeath();
 

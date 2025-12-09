@@ -7,6 +7,7 @@
 #include "HealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHurt, float, Ratio);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHeal, float, Ratio);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -29,7 +30,11 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnDeath OnDeath;
-
+	
+	UPROPERTY(BlueprintAssignable, Category = "Health")
+	FOnHeal OnHeal;
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthRatio() const;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

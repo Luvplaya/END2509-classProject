@@ -55,13 +55,18 @@ void ABasePlayer::BeginPlay()
 			if (PlayerHUD) PlayerHUD->AddToViewport();
 		}
 	}
-
+	if (HealthComponent)
+	{
+		HealthComponent->OnHeal.AddDynamic(this, &ABasePlayer::HandleHeal);
+		HealthComponent->OnHurt.AddDynamic(this, &ABasePlayer::HandleHurt);
+	}
 	
 	if (HealthComponent && PlayerHUD)
 	{
 		/*HealthComponent->OnHurt.AddDynamic(PlayerHUD, &UPlayerHUD::SetHealth);
 		HealthComponent->OnDeath.AddDynamic(PlayerHUD, &UPlayerHUD::SetHealth);*/
 		UE_LOG(LogTemp, Warning, TEXT("HUD bound to HealthComp on %s"), *GetName());
+		PlayerHUD->SetHealth(HealthComponent->GetHealthRatio());
 	}
 	if (HUDClass)
 	{
@@ -89,6 +94,7 @@ void ABasePlayer::BeginPlay()
 	}
 
 	
+	
 	if (PlayerHUD && EquippedRifle)
 	{
 		PlayerHUD->SetAmmo(
@@ -96,12 +102,13 @@ void ABasePlayer::BeginPlay()
 			EquippedRifle->GetMaxAmmo());
 	}
 	AnimBP = Cast<UCharacterAnimation>(GetMesh()->GetAnimInstance());
+	
 }
 
 void ABasePlayer::HandleHurt(float Ratio)
 {
 	Super::HandleHurt(Ratio);
-
+	
 	if (UPlayerHUD* HUD = GetPlayerHUD())
 	{
 		HUD->SetHealth(Ratio);
@@ -111,7 +118,7 @@ void ABasePlayer::HandleHurt(float Ratio)
 void ABasePlayer::HandleDeath()
 {
 	Super::HandleDeath();
-
+	
 	if (UPlayerHUD* HUD = GetPlayerHUD())
 	{
 		HUD->SetHealth(0.0f);
@@ -222,3 +229,17 @@ void ABasePlayer::ReloadEnded()
 {
 	bIsReloading = false;
 }
+bool ABasePlayer::CanPickupHealth_Implementation(AActor* PickupActor)
+{
+	
+	return true;
+}
+void ABasePlayer::HandleHeal(float Ratio)
+{
+
+	if (UPlayerHUD* HUD = GetPlayerHUD())
+	{
+		HUD->SetHealth(Ratio);
+	}
+}
+

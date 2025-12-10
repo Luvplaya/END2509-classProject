@@ -30,6 +30,10 @@ void AAgent::BeginPlay()
     HealthRatio = 1.0f;
 
     UpdateHealthBlackboard();
+    if (WeaponObject)
+    {
+        WeaponObject->ReloadAmmo();   
+    }
 }
 
 void AAgent::ApplyDamage_Implementation(float Amount)
@@ -84,4 +88,25 @@ float AAgent::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
     }
 
     return ActualDamage;
+}
+void AAgent::ReloadWeapon()
+{
+    if (!WeaponObject) return;
+    if (WeaponObject->GetCurrentAmmo() >= WeaponObject->GetMaxAmmo()) return;
+
+    
+  
+
+    if (AnimBP)
+    {
+        AnimBP->ReloadAnimation();   
+    }
+}
+
+void AAgent::FinishReload()
+{
+    if (!WeaponObject) return;
+
+    WeaponObject->ReloadAmmo();      
+    
 }

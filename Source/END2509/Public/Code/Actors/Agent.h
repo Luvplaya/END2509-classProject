@@ -45,4 +45,9 @@ public:
         struct FDamageEvent const& DamageEvent,
         class AController* EventInstigator,
         AActor* DamageCauser) override;
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    void ReloadWeapon();
+
+    UFUNCTION(BlueprintCallable, Category = "Weapon")
+    void FinishReload();
 };

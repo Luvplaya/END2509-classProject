@@ -34,9 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Hit/Death")
 	void HitAnimation(float NotUsed = 0.f);
 
-	UFUNCTION(BlueprintCallable, Category = "Hit/Death")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Hit/Death")
 	void SelectDeathAnimation();
-
+	virtual void SelectDeathAnimation_Implementation();
+	
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds)override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 protected:

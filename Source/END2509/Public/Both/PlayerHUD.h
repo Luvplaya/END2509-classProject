@@ -34,10 +34,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly, Category = "HUD") FLinearColor SafeColor = FLinearColor(0.1f, 0.1f, 0.7f, 1.f);
 	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly, Category = "HUD") FLinearColor DangerColor = FLinearColor(0.85f, 0.1f, 0.1f, 1.f);
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
 	UTextBlock* CurrentAmmo;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
 	UTextBlock* MaxAmmo;
 public:
 	

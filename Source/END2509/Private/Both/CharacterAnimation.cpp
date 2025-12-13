@@ -16,7 +16,7 @@ void UCharacterAnimation::HitAnimation(float/*NotUsed*/)
 		PlaySlotAnimationAsDynamicMontage(HitAsset, ActionSlotName);
 	}
 }
-void UCharacterAnimation::SelectDeathAnimation()
+void UCharacterAnimation::SelectDeathAnimation_Implementation()
 {
 	if (DeathAssets.Num() > 0)
 	{
@@ -24,6 +24,7 @@ void UCharacterAnimation::SelectDeathAnimation()
 		CurrentDeathAsset = DeathAssets[Index];
 		
 	}
+	
 }
 void UCharacterAnimation::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 {

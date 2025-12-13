@@ -9,7 +9,7 @@
 /**
  * 
  */
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerLost); 
 UCLASS()
 class END2509_API ABasePlayer : public ABaseCharacter
 {
@@ -55,12 +55,16 @@ protected:
 
 	UPROPERTY()
 	UPlayerHUD* PlayerHUD ;
+
+	UPROPERTY(BlueprintAssignable, Category = "Game")
+	FOnPlayerLost OnPlayerLost;
 public:
 	
 	virtual void HandleHurt(float Ratio) override;
 	virtual void HandleDeath() override;
 	
 	virtual void HandleHeal(float Ratio) override;
+	void PlayerLost();
 	UPlayerHUD* GetPlayerHUD() const { return PlayerHUD; }
 
 private:

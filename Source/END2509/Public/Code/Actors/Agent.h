@@ -22,6 +22,8 @@ public:
 protected:
     virtual void BeginPlay() override;
 
+    void HandleDeath();
+
     // Health
     UPROPERTY(EditDefaultsOnly, Category = "Health")
     float MaxHealth = 5.0f;

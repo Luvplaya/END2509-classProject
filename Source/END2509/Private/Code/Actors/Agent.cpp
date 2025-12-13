@@ -34,8 +34,20 @@ void AAgent::BeginPlay()
     {
         WeaponObject->ReloadAmmo();   
     }
-}
 
+    if (USkeletalMeshComponent* MeshComp = GetMesh())
+    {
+        if (UCharacterAnimation* Anim = Cast<UCharacterAnimation>(MeshComp->GetAnimInstance()))
+        {
+            Anim->OnDeathEnded.AddDynamic(this, &AActor::K2_DestroyActor);
+        }
+    }
+}
+void AAgent::HandleDeath()
+{
+    DetachFromControllerPendingDestroy(); 
+    Super::HandleDeath();                 
+}
 void AAgent::ApplyDamage_Implementation(float Amount)
 {
     CurrentHealth = FMath::Clamp(CurrentHealth - Amount, 0.f, MaxHealth);

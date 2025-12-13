@@ -24,7 +24,15 @@ void UCharacterAnimation::SelectDeathAnimation_Implementation()
 		CurrentDeathAsset = DeathAssets[Index];
 		
 	}
-	
+	float Len = 2.0f;
+	if (CurrentDeathAsset)
+		Len = CurrentDeathAsset->GetPlayLength();
+
+	if (UWorld* W = GetWorld())
+	{
+		W->GetTimerManager().SetTimer(DeathTimerHandle, this,
+			&UCharacterAnimation::DeathEnded, Len, false);
+	}
 }
 void UCharacterAnimation::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 {
@@ -116,4 +124,8 @@ void UCharacterAnimation::ReloadFinished()
 	{
 		Player->ReloadEnded();
 	}
+}
+void UCharacterAnimation::DeathEnded()
+{
+	OnDeathEnded.Broadcast();
 }

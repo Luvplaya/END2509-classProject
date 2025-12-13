@@ -8,7 +8,7 @@
 
  
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FReloadEvent); 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathEnded); 
 
 UCLASS()
 class END2509_API UCharacterAnimation : public UAnimInstance
@@ -48,7 +48,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Anim|Hit/Death")
 	FName ActionSlotName = TEXT("ActionSlot");
 	
-	
+	FTimerHandle DeathTimerHandle;
+
+	UFUNCTION()
+	void DeathEnded();
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Anim")
 	TObjectPtr<class UAnimSequenceBase> FireAnim = nullptr;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Anim")
@@ -65,6 +68,10 @@ public:
 
 	UPROPERTY(BlueprintCallable,BlueprintAssignable, Category = "Reload")
 	FReloadEvent OnReloadEnded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Hit/Death")
+	FOnDeathEnded OnDeathEnded;
+
 	UFUNCTION(BlueprintCallable)
 	void FireAnimation();
 	UFUNCTION(BlueprintCallable)

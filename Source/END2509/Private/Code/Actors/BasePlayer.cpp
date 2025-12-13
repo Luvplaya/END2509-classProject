@@ -103,6 +103,13 @@ void ABasePlayer::BeginPlay()
 	}
 	AnimBP = Cast<UCharacterAnimation>(GetMesh()->GetAnimInstance());
 	
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		if (UCharacterAnimation* Anim = Cast<UCharacterAnimation>(MeshComp->GetAnimInstance()))
+		{
+			Anim->OnDeathEnded.AddDynamic(this, &ABasePlayer::PlayerLost);
+		}
+	}
 }
 
 void ABasePlayer::HandleHurt(float Ratio)
@@ -242,4 +249,7 @@ void ABasePlayer::HandleHeal(float Ratio)
 		HUD->SetHealth(Ratio);
 	}
 }
-
+void ABasePlayer::PlayerLost()
+{
+	OnPlayerLost.Broadcast();
+}

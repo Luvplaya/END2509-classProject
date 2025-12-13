@@ -56,10 +56,10 @@ protected:
 	UPROPERTY()
 	UPlayerHUD* PlayerHUD ;
 
-	UPROPERTY(BlueprintAssignable, Category = "Game")
-	FOnPlayerLost OnPlayerLost;
-public:
 	
+public:
+	UPROPERTY(BlueprintAssignable, Category = "Game")
+	FOnPlayerLost OnPlayerLost; 
 	virtual void HandleHurt(float Ratio) override;
 	virtual void HandleDeath() override;
 	

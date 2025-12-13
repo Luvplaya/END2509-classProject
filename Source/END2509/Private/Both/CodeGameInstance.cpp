@@ -4,6 +4,7 @@
 #include "Both/CodeGameInstance.h"
 #include "Engine/World.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include <Kismet/GameplayStatics.h>
 
 
 
@@ -35,4 +36,26 @@ void UCodeGameInstance::QuitGame()
             UKismetSystemLibrary::QuitGame(World, PC, EQuitPreference::Quit, false);
         }
     }
+}
+void UCodeGameInstance::LoadCurrentLevel()
+{
+    LoadLevelSafe(CurrentLevelIndex);
+}
+
+void UCodeGameInstance::LoadMainMenu()
+{
+    LoadLevelSafe(0);
+}
+
+void UCodeGameInstance::LoadLevelSafe(int32 LevelIndex)
+{
+    if (!GameLevels.IsValidIndex(LevelIndex))
+    {
+        UE_LOG(LogTemp, Error, TEXT("Invalid Level Index %d"), LevelIndex);
+        return;
+    }
+
+    CurrentLevelIndex = LevelIndex;
+
+    UGameplayStatics::OpenLevel(this, GameLevels[LevelIndex]);
 }

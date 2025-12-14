@@ -7,7 +7,8 @@
 #include "CharacterAnimation.generated.h"
 
  
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FReloadEvent); 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReloadNow);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReloadEnded);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathEnded); 
 
 UCLASS()
@@ -64,10 +65,10 @@ public:
 
 public:
 	UPROPERTY(BlueprintCallable,BlueprintAssignable, Category = "Reload")
-	FReloadEvent OnReloadNow;
+	FOnReloadNow OnReloadNow;
 
 	UPROPERTY(BlueprintCallable,BlueprintAssignable, Category = "Reload")
-	FReloadEvent OnReloadEnded;
+	FOnReloadEnded OnReloadEnded;
 
 	UPROPERTY(BlueprintAssignable, Category = "Hit/Death")
 	FOnDeathEnded OnDeathEnded;
@@ -78,9 +79,9 @@ public:
 	void ReloadAnimation();
 
 	virtual void NativeInitializeAnimation() override;
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ReloadNow();
 
-	UFUNCTION()
-	void ReloadFinished();
+	UFUNCTION(BlueprintCallable)
+	void ReloadEnded();
 };

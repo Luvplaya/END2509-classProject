@@ -106,7 +106,7 @@ void UCharacterAnimation::NativeInitializeAnimation()
 
 	
 	OnReloadNow.AddDynamic(this, &UCharacterAnimation::ReloadNow);
-	OnReloadEnded.AddDynamic(this, &UCharacterAnimation::ReloadFinished);
+	OnReloadEnded.AddDynamic(this, &UCharacterAnimation::ReloadEnded);
 }
 void UCharacterAnimation::ReloadNow()
 {
@@ -117,7 +117,7 @@ void UCharacterAnimation::ReloadNow()
 	}
 }
 
-void UCharacterAnimation::ReloadFinished()
+void UCharacterAnimation::ReloadEnded()
 {
 	APawn* OwnerPawn = TryGetPawnOwner();
 	if (ABasePlayer* Player = Cast<ABasePlayer>(OwnerPawn))

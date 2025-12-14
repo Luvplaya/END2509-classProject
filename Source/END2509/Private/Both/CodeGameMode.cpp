@@ -11,7 +11,7 @@
 
 
 #include "Code/Actors/BaseCharacter.h"  
-#include <Kismet/GameplayStatics.h>
+#include "EngineUtils.h" 
 
 
 void ACodeGameMode::BeginPlay()
@@ -21,31 +21,33 @@ void ACodeGameMode::BeginPlay()
     
     if (ResultsWidgetClass)
     {
-        APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-        ResultsWidget = CreateWidget<UCodeResultsWidget>(PC, ResultsWidgetClass);
+        if (APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
+        {
+            ResultsWidget = CreateWidget<UCodeResultsWidget>(PC, ResultsWidgetClass);
+        }
     }
 
    
     NumberOfEnemies = 0;
 
-    TArray<AActor*> Found;
-
-  
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), Found);
-
-    for (AActor* A : Found)
+    for (TActorIterator<ABaseCharacter> It(GetWorld()); It; ++It)
     {
-        if (ABasePlayer* P = Cast<ABasePlayer>(A))
+        ABaseCharacter* Char = *It;
+        if (!Char) continue;
+
+       
+        if (ABasePlayer* P = Cast<ABasePlayer>(Char))
         {
            
             P->OnPlayerLost.AddDynamic(this, &ACodeGameMode::RemovePlayer);
+            continue;
         }
-        else
+
+      
+        if (AAgent* Enemy = Cast<AAgent>(Char))
         {
             NumberOfEnemies++;
-
-           
-            A->OnDestroyed.AddDynamic(this, &ACodeGameMode::RemoveEnemy);
+            Enemy->OnDestroyed.AddDynamic(this, &ACodeGameMode::RemoveEnemy);
         }
     }
 }
@@ -73,7 +75,7 @@ void ACodeGameMode::HandleWin()
     ResultsWidget->AddToViewport();
     ResultsWidget->SetWin();
 
-    if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+    if (APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
     {
         PC->SetIgnoreMoveInput(true);
         PC->SetIgnoreLookInput(true);
@@ -91,7 +93,7 @@ void ACodeGameMode::HandleLose()
     ResultsWidget->AddToViewport();
     ResultsWidget->SetLose();
 
-    if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+    if (APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
     {
         FInputModeUIOnly Mode;
         Mode.SetWidgetToFocus(ResultsWidget->TakeWidget());
@@ -109,7 +111,7 @@ void ACodeGameMode::ReturnToMenu()
 }
 void ACodeGameMode::HidePlayerHUD()
 {
-    if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+    if (APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
     {
         if (ABasePlayer* Player = Cast<ABasePlayer>(PC->GetPawn()))
         {

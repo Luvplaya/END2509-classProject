@@ -9,6 +9,7 @@
 #include "BrainComponent.h"
 #include "Both/CharacterAnimation.h"
 #include "Code/Actors/HealthComponent.h"
+#include "Code/Actors/BasePlayer.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -82,6 +83,7 @@ void ABaseCharacter::HandleDeath()
 	{
 		if (UCharacterAnimation* Anim = Cast<UCharacterAnimation>(MeshComp->GetAnimInstance()))
 		{
+			 
 			Anim->SelectDeathAnimation();
 		}
 	}

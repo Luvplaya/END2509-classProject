@@ -46,7 +46,14 @@ void ABasePlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	if (USkeletalMeshComponent* MeshComp = GetMesh())
+	{
+		if (UCharacterAnimation* Anim = Cast<UCharacterAnimation>(MeshComp->GetAnimInstance()))
+		{
+			Anim->OnDeathEnded.AddDynamic(this, &ABasePlayer::PlayerLost);
+
+		}
+	}
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
 		if (PlayerHUDClass)
@@ -103,13 +110,7 @@ void ABasePlayer::BeginPlay()
 	}
 	AnimBP = Cast<UCharacterAnimation>(GetMesh()->GetAnimInstance());
 	
-	if (USkeletalMeshComponent* MeshComp = GetMesh())
-	{
-		if (UCharacterAnimation* Anim = Cast<UCharacterAnimation>(MeshComp->GetAnimInstance()))
-		{
-			Anim->OnDeathEnded.AddDynamic(this, &ABasePlayer::PlayerLost);
-		}
-	}
+	
 }
 
 void ABasePlayer::HandleHurt(float Ratio)
@@ -251,5 +252,14 @@ void ABasePlayer::HandleHeal(float Ratio)
 }
 void ABasePlayer::PlayerLost()
 {
+	UE_LOG(LogTemp, Warning, TEXT("PlayerLost fired"));
 	OnPlayerLost.Broadcast();
+}
+void ABasePlayer::RemoveHUD()
+{
+	if (PlayerHUD)
+	{
+		PlayerHUD->RemoveFromParent();
+		PlayerHUD = nullptr;
+	}
 }

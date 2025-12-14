@@ -64,7 +64,10 @@ public:
 	virtual void HandleDeath() override;
 	
 	virtual void HandleHeal(float Ratio) override;
+	UFUNCTION()
 	void PlayerLost();
+	UFUNCTION()
+	void RemoveHUD();
 	UPlayerHUD* GetPlayerHUD() const { return PlayerHUD; }
 
 private:

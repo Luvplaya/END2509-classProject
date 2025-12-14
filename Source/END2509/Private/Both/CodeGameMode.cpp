@@ -62,13 +62,14 @@ void ACodeGameMode::RemoveEnemy(AActor* DestroyedActor)
 
 void ACodeGameMode::RemovePlayer()
 {
+    UE_LOG(LogTemp, Warning, TEXT("GameMode RemovePlayer -> HandleLose"));
     HandleLose();
 }
 
 void ACodeGameMode::HandleWin()
 {
     if (!ResultsWidget) return;
-
+    HidePlayerHUD();
     ResultsWidget->AddToViewport();
     ResultsWidget->SetWin();
 
@@ -80,12 +81,13 @@ void ACodeGameMode::HandleWin()
 
     GetWorldTimerManager().SetTimer(WinReturnHandle, this,
         &ACodeGameMode::ReturnToMenu, 2.0f, false);
+
 }
 
 void ACodeGameMode::HandleLose()
 {
     if (!ResultsWidget) return;
-
+    HidePlayerHUD();
     ResultsWidget->AddToViewport();
     ResultsWidget->SetLose();
 
@@ -103,5 +105,15 @@ void ACodeGameMode::ReturnToMenu()
     if (UCodeGameInstance* GI = GetGameInstance<UCodeGameInstance>())
     {
         GI->LoadMainMenu();
+    }
+}
+void ACodeGameMode::HidePlayerHUD()
+{
+    if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+    {
+        if (ABasePlayer* Player = Cast<ABasePlayer>(PC->GetPawn()))
+        {
+            Player->RemoveHUD();
+        }
     }
 }

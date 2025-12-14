@@ -28,16 +28,16 @@ public:
     void SetLose();
 
 protected:
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
     UWidgetSwitcher* WidgetSwitcher;
 
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
     UPanelWidget* ButtonArea;
 
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
     UButtonWithTextWidget* RestartButton;
 
-    UPROPERTY(meta = (BindWidget))
+    UPROPERTY(BlueprintReadOnly,meta = (BindWidget))
     UButtonWithTextWidget* MenuButton;
 
     UPROPERTY()

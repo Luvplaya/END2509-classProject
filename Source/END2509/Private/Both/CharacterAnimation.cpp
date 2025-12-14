@@ -127,5 +127,6 @@ void UCharacterAnimation::ReloadFinished()
 }
 void UCharacterAnimation::DeathEnded()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Anim DeathEnded broadcast"));
 	OnDeathEnded.Broadcast();
 }

@@ -44,4 +44,5 @@ protected:
     void HandleLose();
 
     void ReturnToMenu();
+    void HidePlayerHUD();
 };

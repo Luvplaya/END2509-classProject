@@ -55,6 +55,7 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Ammo")
 	float GetMaxAmmo() const { return MaxAmmo; }
+	void IncreaseMaxAmmo(int32 Amount);
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rifle")
 	USkeletalMeshComponent* Mesh;

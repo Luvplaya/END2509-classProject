@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <Both/PlayerHUD.h>
 #include "Code/Actors/BaseCharacter.h"
 #include "BasePlayer.generated.h"
+
 
 /**
  * 
@@ -35,6 +37,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void ReloadWeapon();
+	ACodeRifle* GetEquippedRifle() const { return EquippedRifle; }
+	
 
 protected:
 	UPROPERTY(Category = Character, VisibleAnywhere)
@@ -55,7 +59,7 @@ protected:
 
 	UPROPERTY()
 	UPlayerHUD* PlayerHUD ;
-
+	
 	
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Game")
@@ -69,7 +73,7 @@ public:
 	UFUNCTION()
 	void RemoveHUD();
 	UPlayerHUD* GetPlayerHUD() const { return PlayerHUD; }
-
+	
 private:
 	UFUNCTION()
 	void InputAxisMoveForward(float AxisValue);

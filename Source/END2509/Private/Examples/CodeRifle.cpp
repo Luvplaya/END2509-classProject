@@ -109,3 +109,8 @@ float ACodeRifle::GetAmmoFraction() const
 {
     return (MaxAmmo > 0.f) ? (CurrentAmmo / MaxAmmo) : 0.f;
 }
+
+void ACodeRifle::IncreaseMaxAmmo(int32 Amount)
+{
+    MaxAmmo += Amount;
+}

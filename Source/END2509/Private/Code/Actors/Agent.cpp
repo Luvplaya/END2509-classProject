@@ -45,6 +45,12 @@ void AAgent::BeginPlay()
 }
 void AAgent::HandleDeath()
 {
+    if (WeaponObject)
+    {
+        WeaponObject->Destroy();
+        WeaponObject = nullptr;
+    }
+
     DetachFromControllerPendingDestroy(); 
     Super::HandleDeath();                 
 }

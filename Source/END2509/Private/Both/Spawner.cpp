@@ -45,7 +45,7 @@ void ASpawner::BeginPlay()
 		SpawnTimer,
 		this,
 		&ASpawner::SpawnAgent,
-		10.0f,   
+		30.0f,   
 		true
 	);
 }

@@ -51,7 +51,16 @@ void ACodeGameMode::BeginPlay()
             Enemy->OnDestroyed.AddDynamic(this, &ACodeGameMode::RemoveEnemy);
         }
     }
-   
+    SpawnersAlive = 0;
+    for (TActorIterator<ASpawner> It(GetWorld()); It; ++It)
+    {
+        ASpawner* S = *It;
+        if (!S) continue;
+
+        SpawnersAlive++;
+        S->OnDestroyed.AddDynamic(this, &ACodeGameMode::OnSpawnerDestroyed);
+    }
+
 }
 
 void ACodeGameMode::RemoveEnemy(AActor* DestroyedActor)
@@ -118,24 +127,15 @@ void ACodeGameMode::HidePlayerHUD()
         }
     }
 }
-void ACodeGameMode::NotifyEnemySpawned(AActor* EnemyActor)
+void ACodeGameMode::OnSpawnerDestroyed(AActor* DestroyedActor)
 {
-    EnemiesAlive++;
-
-    if (EnemyActor)
-    {
-        EnemyActor->OnDestroyed.AddDynamic(this, &ACodeGameMode::RemoveEnemy);
-    }
-}
-
-void ACodeGameMode::NotifySpawnerDestroyed()
-{
-    bSpawnerAlive = false;
+    SpawnersAlive--;
     CheckWinCondition();
 }
+
 void ACodeGameMode::CheckWinCondition()
 {
-    if (EnemiesAlive <= 0 && bSpawnerAlive == false)
+    if (NumberOfEnemies <= 0 && SpawnersAlive <= 0)
     {
         HandleWin();
     }

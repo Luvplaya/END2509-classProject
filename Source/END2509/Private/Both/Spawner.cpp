@@ -7,7 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Code/Actors/Projectile.h"
 #include "Code/Actors/Agent.h"
-#include "Both/CodeGameMode.h"
+
 
 
 
@@ -31,12 +31,6 @@ ASpawner::ASpawner()
 
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
-	AActor* Spawned = GetWorld()->SpawnActor<AActor>(AgentClass, GetActorLocation(), GetActorRotation());
-
-	if (ACodeGameMode* GM = GetWorld()->GetAuthGameMode<ACodeGameMode>())
-	{
-		GM->NotifyEnemySpawned(Spawned);
-	}
 
 }
 
@@ -81,11 +75,6 @@ void ASpawner::OnSpawnerOverlap(
 	if (Health <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawner destroyed!"));
-		if (ACodeGameMode* GM = GetWorld()->GetAuthGameMode<ACodeGameMode>())
-		{
-			GM->NotifySpawnerDestroyed();
-		}
-
 		Destroy();
 	}
 }

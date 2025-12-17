@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Code/Actors/BaseCharacter.h"
 #include "Code/Actors/CodeAgentController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -86,7 +86,10 @@ void ACodeAgentController::OnTargetPerception(AActor* Actor, FAIStimulus Stimulu
     if (!BB) return;
    
     const float Now = GetWorld()->GetTimeSeconds();
-   
+    if (GetTeamAttitudeTowards(*Actor) != ETeamAttitude::Hostile)
+    {
+        return; 
+    }
     if (Stimulus.WasSuccessfullySensed())
     {
         BB->SetValueAsObject(TEXT("Player"), Actor);
@@ -97,4 +100,29 @@ void ACodeAgentController::OnTargetPerception(AActor* Actor, FAIStimulus Stimulu
        
         LastTimeSensedPlayer = Now;
     }
+}
+FGenericTeamId ACodeAgentController::GetGenericTeamId() const
+{
+   
+    if (const ABaseCharacter* BC = Cast<ABaseCharacter>(GetPawn()))
+    {
+        return BC->GetGenericTeamId();
+    }
+    return CachedTeamId;
+}
+
+void ACodeAgentController::SetGenericTeamId(const FGenericTeamId& NewTeamID)
+{
+    CachedTeamId = NewTeamID;
+}
+ETeamAttitude::Type ACodeAgentController::GetTeamAttitudeTowards(const AActor& Other) const
+{
+    const ABaseCharacter* Me = Cast<ABaseCharacter>(GetPawn());
+    const ABaseCharacter* Them = Cast<ABaseCharacter>(&Other);
+
+    if (!Me || !Them) return ETeamAttitude::Neutral;
+
+    return (Me->GetGenericTeamId() == Them->GetGenericTeamId())
+        ? ETeamAttitude::Friendly
+        : ETeamAttitude::Hostile;
 }

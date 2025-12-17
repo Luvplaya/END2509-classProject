@@ -9,13 +9,27 @@ AAgent::AAgent()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+   
 }
 
 void AAgent::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
 
-    if (!WeaponObject) return;                
+    if (!WeaponObject) return;  
+    AAIController* AIC = Cast<AAIController>(GetController());
+    if (!AIC) return;
+
+    UBlackboardComponent* BB = AIC->GetBlackboardComponent();
+    if (!BB) return;
+
+    AActor* Target = Cast<AActor>(BB->GetValueAsObject(TEXT("Player")));
+    if (!Target) return;
+
+  
+    if (AIC->GetTeamAttitudeTowards(*Target) != ETeamAttitude::Hostile)
+        return;
     if (WeaponObject->CanShoot())             
     {
         WeaponObject->Attack();
@@ -30,6 +44,14 @@ void AAgent::BeginPlay()
     HealthRatio = 1.0f;
 
     UpdateHealthBlackboard();
+
+   
+
+       if (WeaponChild)
+{
+    WeaponObject = Cast<ACodeRifle>(WeaponChild->GetChildActor());
+}
+    
     if (WeaponObject)
     {
         WeaponObject->ReloadAmmo();   
@@ -45,12 +67,12 @@ void AAgent::BeginPlay()
 }
 void AAgent::HandleDeath()
 {
-    if (WeaponObject)
+    if (WeaponChild)
     {
-        WeaponObject->Destroy();
-        WeaponObject = nullptr;
+        WeaponChild->DestroyChildActor();
+       
     }
-
+    WeaponObject = nullptr;
     DetachFromControllerPendingDestroy(); 
     Super::HandleDeath();                 
 }

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "GenericTeamAgentInterface.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -24,6 +24,11 @@ public:
 
     virtual void OnPossess(APawn* InPawn) override;
     virtual void Tick(float DeltaSeconds) override;
+    virtual FGenericTeamId GetGenericTeamId() const override;
+    virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+
+    
+    virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override;
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "AI")
     float LoseSightDelay = 2.0f;
@@ -45,4 +50,6 @@ protected:
 
     UFUNCTION()
     void OnTargetPerception(AActor* Actor, FAIStimulus Stimulus);
+private:
+    FGenericTeamId CachedTeamId = FGenericTeamId(0);
 };

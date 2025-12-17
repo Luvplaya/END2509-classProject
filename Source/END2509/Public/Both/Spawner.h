@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TimerManager.h"
 #include "Spawner.generated.h"
 class UBoxComponent;
 class UStaticMeshComponent;
@@ -28,7 +29,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawner")
 	TSubclassOf<AActor> AgentClass;
-
+	FTimerHandle SpawnTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawner")
 	int32 Health = 3;

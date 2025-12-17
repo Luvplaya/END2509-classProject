@@ -6,6 +6,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Code/Actors/Projectile.h"
+#include "Both/CodeGameMode.h"
 #include "Code/Actors/Agent.h"
 
 
@@ -40,18 +41,26 @@ void ASpawner::BeginPlay()
 
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ASpawner::OnSpawnerOverlap);
 
-	SpawnAgent();
+	GetWorldTimerManager().SetTimer(
+		SpawnTimer,
+		this,
+		&ASpawner::SpawnAgent,
+		10.0f,   
+		true
+	);
 }
 
 void ASpawner::SpawnAgent()
 {
 	if (!AgentClass) return;
-
+	
 	GetWorld()->SpawnActor<AActor>(
 		AgentClass,
 		GetActorLocation(),
 		GetActorRotation()
 	);
+	
+	
 }
 
 void ASpawner::OnSpawnerOverlap(
@@ -75,6 +84,12 @@ void ASpawner::OnSpawnerOverlap(
 	if (Health <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Spawner destroyed!"));
+		GetWorldTimerManager().ClearTimer(SpawnTimer); 
+
+		if (ACodeGameMode* GM = GetWorld()->GetAuthGameMode<ACodeGameMode>())
+		{
+			GM->OnSpawnerDestroyed(this);
+		}
 		Destroy();
 	}
 }

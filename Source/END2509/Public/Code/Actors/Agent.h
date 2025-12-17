@@ -38,6 +38,7 @@ public:
    /* UFUNCTION(BlueprintCallable, Category = "Health")
     void ApplyDamage(float Amount);*/
     virtual void ApplyDamage_Implementation(float Amount) override;
+
 protected:
     void UpdateHealthBlackboard();
 

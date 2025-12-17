@@ -18,7 +18,8 @@ class END2509_API ACodeGameMode : public AGameModeBase
 	GENERATED_BODY()
 public:
     virtual void BeginPlay() override;
-
+    UFUNCTION()
+    void OnSpawnerDestroyed(AActor* DestroyedActor);
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rules")
     int32 NumberOfEnemies = 0;
@@ -47,8 +48,7 @@ protected:
     void HidePlayerHUD();
     int32 SpawnersAlive = 0;
 
-    UFUNCTION()
-    void OnSpawnerDestroyed(AActor* DestroyedActor);
+   
 
     void CheckWinCondition();
 };

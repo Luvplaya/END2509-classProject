@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "GenericTeamAgentInterface.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Both/CharacterAnimation.h"
@@ -25,6 +25,11 @@ public:
 	virtual bool CanPickupHealth_Implementation(AActor* PickupActor) override;
 public:
 	FORCEINLINE ACodeRifle* GetWeaponObject() const { return WeaponObject; }
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Teams")
+	int32 TeamNumber = 0;
+
+	
+	FGenericTeamId GetGenericTeamId() const { return FGenericTeamId((uint8)TeamNumber); }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -12,6 +12,7 @@
 
 #include "Code/Actors/BaseCharacter.h"  
 #include "EngineUtils.h" 
+#include <Both/Spawner.h>
 
 
 void ACodeGameMode::BeginPlay()
@@ -50,16 +51,14 @@ void ACodeGameMode::BeginPlay()
             Enemy->OnDestroyed.AddDynamic(this, &ACodeGameMode::RemoveEnemy);
         }
     }
+   
 }
 
 void ACodeGameMode::RemoveEnemy(AActor* DestroyedActor)
 {
     NumberOfEnemies--;
 
-    if (NumberOfEnemies <= 0)
-    {
-        HandleWin();
-    }
+    CheckWinCondition();
 }
 
 void ACodeGameMode::RemovePlayer()
@@ -117,5 +116,27 @@ void ACodeGameMode::HidePlayerHUD()
         {
             Player->RemoveHUD();
         }
+    }
+}
+void ACodeGameMode::NotifyEnemySpawned(AActor* EnemyActor)
+{
+    EnemiesAlive++;
+
+    if (EnemyActor)
+    {
+        EnemyActor->OnDestroyed.AddDynamic(this, &ACodeGameMode::RemoveEnemy);
+    }
+}
+
+void ACodeGameMode::NotifySpawnerDestroyed()
+{
+    bSpawnerAlive = false;
+    CheckWinCondition();
+}
+void ACodeGameMode::CheckWinCondition()
+{
+    if (EnemiesAlive <= 0 && bSpawnerAlive == false)
+    {
+        HandleWin();
     }
 }
